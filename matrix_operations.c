@@ -6,10 +6,12 @@
 
     #include <stdio.h>
     #include <math.h>
+    #include<stdbool.h>
+    #include<string.h>
 
      
 
-    void multiply(int m1, int n1, float a[10][10], int m2, int n2, float b[10][10], float c[10][10]);
+    void multiply (int m1, int n1, float x[10][10], int m2, int n2, float y[10][10], float xy[10][10],bool recur);
 
     void display(int m1, int n1, float[10][10],char message[30]);
 
@@ -31,11 +33,16 @@
 
     void Jacobi(int m1, int n1, float A[10][10], int m2, int n2, float b[10][10], float x[10][10]);
 
+    void clean(int m1,int n1, float c[10][10]);
+
+
+
+
     int main()
 
     {
 
-        float dt, a[10][10], b[10][10], /*c[10][10] = {0},*/d[10][10] = {0}, e[10][10];
+        float dt, a[10][10]={0}, b[10][10]={0}, /*c[10][10] = {0},*/d[10][10] = {0}, e[10][10];
         int m1, n1, m2, n2, i, j, k;
         float c[10][10] = {{0},{0},{0}};
 
@@ -79,9 +86,17 @@
     /*Genral matrix function*/
     /*where m1 -> # of rows of first matrix , n1 -> # of columns of first matrix , a -> first matrix, 
     m2 -> # of rows of second matrix , n2 -> # of columns of second matrix ,b -> second matrix, c -> result matrix*/
-    void multiply (int m1, int n1, float a[10][10], int m2, int n2, float b[10][10], float c[10][10])
+    void multiply (int m1, int n1, float x[10][10], int m2, int n2, float y[10][10], float xy[10][10],bool recur)
     {
         static int i = 0, j = 0, k = 0;
+        if(!recur){
+            i -= i;
+            j -= j;
+            k -= k;
+        }
+            
+    
+        float r = 0;
         if (i >= m1)
         {
             return;
@@ -92,17 +107,18 @@
             {
                 if (k < n1)
                 {
-                    c[i][j] += a[i][k] * b[k][j];
+                    xy[i][j] += x[i][k] * y[k][j];
+                    
                     k++;
-                    multiply(m1, n1, a, m2, n2, b, c);
+                    multiply(m1, n1, x, m2, n2, y, xy,true);
                 }
                 k = 0;
                 j++;
-                multiply(m1, n1, a, m2, n2, b, c);
+                multiply(m1, n1, x, m2, n2, y, xy,true);
             }
             j = 0;
             i++;
-            multiply(m1, n1, a, m2, n2, b, c);
+            multiply(m1, n1, x, m2, n2, y, xy,true);
         }
     }
     /*General Matrix function*/
@@ -116,9 +132,9 @@
             for (j = 0; j < n2; j++)
             {
                 c[i][j]=a[i][j]-b[i][j];        
-                printf("%f  ", c[i][j]);
+                // printf("%f  ", c[i][j]);
             }
-            printf("\n");
+            // printf("\n");
         }
      }
     /*General Matrix function*/
@@ -173,6 +189,7 @@
     void display(int m1, int n2, float c[10][10], char message[30])
 
     {
+        clean(m1,n2,c);
         int i, j;
         printf("\n%s\n",message);
         for (i = 0; i < m1; i++)
@@ -182,6 +199,31 @@
                 printf("%f  ", c[i][j]);
             }
             printf("\n");
+        }
+    }
+    void clean(int m1,int n1, float c[10][10])
+    {
+        int i, j;
+        for (i = 0; i < m1; i++)
+        {
+            for (j = 0; j < n1; j++)
+            {
+                c[i][j] +=0.0;
+            }
+        }
+    }
+
+    void reset(int m1, int n1, float c[10][10])
+
+    {
+        clean(m1,n1,c);
+        int i, j;
+        for (i = 0; i < m1; i++)
+        {
+            for (j = 0; j < n1; j++)
+            {
+                c[i][j] = 0;
+            }
         }
     }
 
@@ -353,24 +395,32 @@
 
     void Jacobi(int m1, int n1, float A[10][10], int m2, int n2, float b[10][10], float x[10][10])
     {
+        int i = 0;
         float D[10][10]= {0};
         float R[10][10]= {0};
         float Rx[10][10]= {0};
         float bRx[10][10]= {0};
-        float iteration[10][10]= {0};
+        float invD[10][10]={0};
         diagonal(m1,n1,A,D);
-        
-        inverse(m1,n1,D,D);
-
-        display(m1,n1,D,"Inverse of Diagonal of A:");
+        inverse(m1,n1,D,invD);
         remain(m1,n1,A,R);
-        display(m1,n1,R,"Remainder of A:");
-        multiply(m1,n1,R,m2,n2,x,Rx);
-        display(m2,n2,Rx,"Rx:");
-        subtraction(m2,n2,b,m2,n2,Rx,bRx);
-        display(m2,n2,bRx,"b minus Rx:");
-        multiply(m1,n1,D,m2,n2,bRx,iteration);
-        display(5,5,iteration,"Jacobi:");
+        while(i<20)
+        {
+            multiply(m1,n1,R,m2,n2,x,Rx,false);
+            // display(m1,n1,R,"R:");
+            display(m1,n1,x,"x:");
+            // display(m1,n1,Rx,"Rx:");
+            subtraction(m2,n2,b,m2,n2,Rx,bRx);
+            // display(m1,n1,bRx,"bRx:");
+            memset(x,0,sizeof(float)*10*10);
+            display(m1,n1,x,"After memset:");
+            multiply(m1,n1,invD,m2,n2,bRx,x,false);
+            display(m1,n1,invD,"InvD:");
+            display(m1,n1,x,"Jacobi:");
+            i +=1;
+        }
+       
+    
     }
 
 
