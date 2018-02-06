@@ -27,7 +27,7 @@
 
     void inverse(int m1, int n1, float d[10][10], float inverse[10][10]);
 
-    void R(int m1, int n1, float a[10][10], float c[10][10]);
+    void remain(int m1, int n1, float a[10][10], float c[10][10]);
 
      
 
@@ -66,7 +66,7 @@
             }
 
             // subtraction(m1, n1, a, m2, n2, b, c);
-            R(m1,n1,a,d);
+            remain(m1,n1,a,d);
             // inverse(m1,n1,d,d);
            
 
@@ -322,11 +322,11 @@
 
     /*This is for the Jacobi Method*/
     /*where m1 -> # of rows , n1 -> # of columns , a -> first matrix, c -> result matrix*/
-    void R(int m1, int n1, float a[10][10], float c[10][10])
+    void remain(int m1, int n1, float a[10][10], float c[10][10])
     {
         if(m1 != n1)
         {
-             printf("Getting R not possible.\n");
+             printf("Getting remainder not possible.\n");
         }
         else
         {
