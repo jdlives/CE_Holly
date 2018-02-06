@@ -9,9 +9,9 @@
 
      
 
-    void multiply(int, int, float [][10], int, int, float [][10], float [][10]);
+    void multiply(int m1, int n1, float a[10][10], int m2, int n2, float b[10][10], float c[10][10]);
 
-    void display(int, int, float[][10]);
+    void display(int m1, int n1, float[10][10],char message[30]);
 
     void diagonal(int m1, int n1, float a[10][10], float c[10][10]);
 
@@ -21,9 +21,13 @@
 
     float determinant(float a[10][10], float k);
 
-    void cofactor(float num[10][10], float f);
+    void cofactor(float num[10][10], float f, float inverse[10][10]);
 
-    void transpose(float num[10][10], float fac[10][10], float r);
+    void transpose(float num[10][10], float fac[10][10], float r, float inverse[10][10]);
+
+    void inverse(int m1, int n1, float d[10][10], float inverse[10][10]);
+
+    void R(int m1, int n1, float a[10][10], float c[10][10]);
 
      
 
@@ -62,27 +66,18 @@
             }
 
             // subtraction(m1, n1, a, m2, n2, b, c);
-            diagonal(m1,n1,a,d);
-            /*Getting the inverse*/
-            dt = determinant(d, m1);
-
-            if (dt == 0)
-            {
-                printf("\nInverse of Entered Matrix is not possible\n");
-            }
-            else
-            {
-                cofactor(d, m1);
-            }
-            /*end*/
+            R(m1,n1,a,d);
+            // inverse(m1,n1,d,d);
+           
 
         }
-        printf("On matrix multiplication of A and B the result is:\n");
-        display(m1, n2, c);
-        display(m1, n1, d);
+        display(m1, n2, c, "Matrix C");
+        display(m1, n1, d, "Matrix D");
 
     }
-
+    /*Genral matrix function*/
+    /*where m1 -> # of rows of first matrix , n1 -> # of columns of first matrix , a -> first matrix, 
+    m2 -> # of rows of second matrix , n2 -> # of columns of second matrix ,b -> second matrix, c -> result matrix*/
     void multiply (int m1, int n1, float a[10][10], int m2, int n2, float b[10][10], float c[10][10])
     {
         static int i = 0, j = 0, k = 0;
@@ -109,8 +104,10 @@
             multiply(m1, n1, a, m2, n2, b, c);
         }
     }
-
-     void subtraction(int m1, int n1, float a[10][10], int m2, int n2, float b[10][10], float c[10][10])
+    /*General Matrix function*/
+    /*where m1 -> # of rows of first matrix , n1 -> # of columns of first matrix , a -> first matrix, 
+    m2 -> # of rows of second matrix , n2 -> # of columns of second matrix ,b -> second matrix, c -> result matrix*/
+    void subtraction(int m1, int n1, float a[10][10], int m2, int n2, float b[10][10], float c[10][10])
      {
         int i, j;
         for (i = 0; i < m1; i++)
@@ -123,8 +120,10 @@
             printf("\n");
         }
      }
-
-     void addition(int m1, int n1, float a[10][10], int m2, int n2, float b[10][10], float c[10][10])
+    /*General Matrix function*/
+    /*where m1 -> # of rows of first matrix , n1 -> # of columns of first matrix , a -> first matrix, 
+    m2 -> # of rows of second matrix , n2 -> # of columns of second matrix ,b -> second matrix, c -> result matrix*/
+    void addition(int m1, int n1, float a[10][10], int m2, int n2, float b[10][10], float c[10][10])
      {
         int i, j;
         for (i = 0; i < m1; i++)
@@ -137,15 +136,17 @@
             printf("\n");
         }
      }
+    /*General Matrix function*/
+    /*where m1 -> # of rows , n1 -> # of columns , a -> first matrix, c -> result matrix*/
+    void diagonal(int m1, int n1, float a[10][10], float c[10][10])
 
-     void diagonal(int m1, int n1, float a[10][10], float c[10][10])
-     {
-         if(m1 != n1)
-         {
+    {
+        if(m1 != n1)
+        {
              printf("Getting diagonal not possible.\n");
-         }
-         else
-         {
+        }
+        else
+        {
             int i, j;
             for (i = 0; i < m1; i++)
             {
@@ -162,15 +163,17 @@
                 }
             }
 
-         }
+        }
         
-     }
+    }
 
-
-    void display(int m1, int n2, float c[10][10])
+    /*To display a matrix.*/
+    /*where m1 -> # of rows , n1 -> # of columns , c -> matrix to be displayed, message-> description of matrix*/
+    void display(int m1, int n2, float c[10][10], char message[30])
 
     {
         int i, j;
+        printf("\n%s\n",message);
         for (i = 0; i < m1; i++)
         {
             for (j = 0; j < n2; j++)
@@ -181,8 +184,8 @@
         }
     }
 
-    /*For calculating Determinant of the Matrix */
-
+    /*This is for calculating Determinant of the Matrix */
+     /*where k -> degree of the matrix, a -> matrix */
     float determinant(float a[10][10], float k)
 
     {
@@ -226,7 +229,10 @@
             return (det);
     }
     
-    void cofactor(float num[10][10], float f)
+    /*This is for calculating Determinant of the Matrix */
+    /*num -> matrix to be processed, f -> the degree if the matrix, 
+    inverse -> where the resultant inverse matrix will be stored*/
+    void cofactor(float num[10][10], float f, float inverse[10][10])
     {
         float b[10][10], fac[10][10];
         int p, q, m, n, i, j;
@@ -258,15 +264,16 @@
                 fac[q][p] = pow(-1, q + p) * determinant(b, f - 1);
             }
         }
-        transpose(num, fac, f);
+        transpose(num, fac, f,inverse);
     }
 
     /*Finding transpose of matrix*/ 
-
-    void transpose(float num[10][10], float fac[10][10], float r)
+    /*num -> matrix to be processed, f -> the degree if the matrix, 
+    inverse -> where the resultant inverse matrix will be stored*/
+    void transpose(float num[10][10], float fac[10][10], float r, float inverse[10][10])
     {
         int i, j;
-        float b[10][10], inverse[10][10], d;
+        float b[10][10], d;
 
         for (i = 0;i < r; i++)
         {
@@ -283,16 +290,64 @@
                 inverse[i][j] = b[i][j] / d;
             }
         }
-        printf("\n\n\nThe inverse of matrix is : \n");
+    }
 
-        for (i = 0;i < r; i++)
+    /*d -> matrix to be processed, m1 and n1 -> rows and columns of the matrix, 
+    inverse -> where the resultant inverse matrix will be stored*/
+    void inverse(int m1, int n1, float d[10][10], float inverse[10][10])
+    {
+
+        if(m1 != n1)
         {
-            for (j = 0;j < r; j++)
-            {
-                printf("\t%f", inverse[i][j]);
-            }
-            printf("\n");
+             printf("Getting inverse is not possible.\n");
         }
+        else
+        {
+            float dt;
+            /*Getting the inverse*/
+            dt = determinant(d, m1);
+
+            if (dt == 0)
+            {
+                printf("\nInverse of Entered Matrix is not possible\n");
+            }
+            else
+            {
+                cofactor(d, m1,inverse);
+            }
+            /*end*/
+        }
+        
+    }
+
+    /*This is for the Jacobi Method*/
+    /*where m1 -> # of rows , n1 -> # of columns , a -> first matrix, c -> result matrix*/
+    void R(int m1, int n1, float a[10][10], float c[10][10])
+    {
+        if(m1 != n1)
+        {
+             printf("Getting R not possible.\n");
+        }
+        else
+        {
+            int i, j;
+            for (i = 0; i < m1; i++)
+            {
+                for (j = 0; j < n1; j++)
+                {
+                    if (i != j)
+                    {
+                        c[i][j] = a[i][j];
+                    }
+                    else
+                    {
+                        c[i][j] = 0;
+                    }
+                }
+            }
+
+        }
+        
     }
 
 
