@@ -29,14 +29,15 @@
 
     void remain(int m1, int n1, float a[10][10], float c[10][10]);
 
-     
+    void Jacobi(int m1, int n1, float A[10][10], int m2, int n2, float b[10][10], float x[10][10]);
 
     int main()
 
     {
 
-        float dt, a[10][10], b[10][10], c[10][10] = {0}, d[10][10] = {0}, e[10][10];
+        float dt, a[10][10], b[10][10], /*c[10][10] = {0},*/d[10][10] = {0}, e[10][10];
         int m1, n1, m2, n2, i, j, k;
+        float c[10][10] = {{0},{0},{0}};
 
         printf("Enter rows and columns for Matrix A respectively: ");
 
@@ -65,14 +66,14 @@
                 scanf("%f", &b[i][j]);
             }
 
-            // subtraction(m1, n1, a, m2, n2, b, c);
-            remain(m1,n1,a,d);
+            Jacobi(m1, n1, a, m2, n2, b, c);
+            // remain(m1,n1,a,d);
             // inverse(m1,n1,d,d);
            
 
         }
         display(m1, n2, c, "Matrix C");
-        display(m1, n1, d, "Matrix D");
+        // display(m1, n1, d, "Matrix D");
 
     }
     /*Genral matrix function*/
@@ -348,6 +349,28 @@
 
         }
         
+    }
+
+    void Jacobi(int m1, int n1, float A[10][10], int m2, int n2, float b[10][10], float x[10][10])
+    {
+        float D[10][10]= {0};
+        float R[10][10]= {0};
+        float Rx[10][10]= {0};
+        float bRx[10][10]= {0};
+        float iteration[10][10]= {0};
+        diagonal(m1,n1,A,D);
+        
+        inverse(m1,n1,D,D);
+
+        display(m1,n1,D,"Inverse of Diagonal of A:");
+        remain(m1,n1,A,R);
+        display(m1,n1,R,"Remainder of A:");
+        multiply(m1,n1,R,m2,n2,x,Rx);
+        display(m2,n2,Rx,"Rx:");
+        subtraction(m2,n2,b,m2,n2,Rx,bRx);
+        display(m2,n2,bRx,"b minus Rx:");
+        multiply(m1,n1,D,m2,n2,bRx,iteration);
+        display(5,5,iteration,"Jacobi:");
     }
 
 
