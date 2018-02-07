@@ -98,9 +98,8 @@
             i -= i;
             j -= j;
             k -= k;
+            memset(xy,0,sizeof(float)*10*10);
         }
-            
-    
         float r = 0;
         if (i >= m1)
         {
@@ -125,6 +124,11 @@
             i++;
             multiply(m1, n1, x, m2, n2, y, xy,true);
         }
+        if(!recur){
+            display(m1,n1,x,"First:");
+            display(m2,n2,y,"Second:");
+            display(m1,n2,xy,"Result Mult:");
+        }
     }
     /*General Matrix function*/
     /*where m1 -> # of rows of first matrix , n1 -> # of columns of first matrix , a -> first matrix, 
@@ -134,7 +138,7 @@
         int i, j;
         for (i = 0; i < m1; i++)
         {
-            for (j = 0; j < n2; j++)
+            for (j = 0; j < n1; j++)
             {
                 c[i][j]=a[i][j]-b[i][j];        
                 // printf("%f  ", c[i][j]);
@@ -422,14 +426,14 @@
         {
             multiply(m1,n1,R,m2,n2,x,Rx,false);
             // display(m1,n1,R,"R:");
-            display(m1,n1,Rx,"Rx:");
+            // display(m1,n1,Rx,"Rx:");
             subtraction(m2,n2,b,m2,n2,Rx,bRx);
             // display(m1,n1,bRx,"bRx:");
             memset(x,0,sizeof(float)*10*10);
-            display(m1,n1,x,"After memset:");
+            // display(m1,n1,x,"After memset:");
             multiply(m1,n1,invD,m2,n2,bRx,x,false);
-            display(m1,n1,bRx,"bRx:");
-            display(m1,n1,invD,"InvD:");
+            // display(m1,n1,bRx,"bRx:");
+            // display(m1,n1,invD,"InvD:");
             display(m1,n1,x,"Jacobi:");
             i +=1;
         }
