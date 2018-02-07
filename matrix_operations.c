@@ -35,13 +35,16 @@
 
     void clean(int m1,int n1, float c[10][10]);
 
-
+    FILE *fp;
+    FILE *ip;
+    
 
 
     int main()
 
     {
-
+        fp = fopen("output.txt", "w");
+        ip = fopen("input.txt","r");
         float dt, a[10][10]={0}, b[10][10]={0}, /*c[10][10] = {0},*/d[10][10] = {0}, e[10][10];
         int m1, n1, m2, n2, i, j, k;
         float c[10][10] = {{0},{0},{0}};
@@ -81,6 +84,7 @@
         }
         display(m1, n2, c, "Matrix C");
         // display(m1, n1, d, "Matrix D");
+        fclose(fp);
 
     }
     /*Genral matrix function*/
@@ -189,17 +193,22 @@
     void display(int m1, int n2, float c[10][10], char message[30])
 
     {
+
         clean(m1,n2,c);
         int i, j;
+        fprintf(fp, "\n%s\n",message);
         printf("\n%s\n",message);
         for (i = 0; i < m1; i++)
         {
             for (j = 0; j < n2; j++)
             {
+                fprintf(fp, "%f  ", c[i][j]);
                 printf("%f  ", c[i][j]);
             }
+            fprintf(fp,"\n");
             printf("\n");
         }
+        
     }
     void clean(int m1,int n1, float c[10][10])
     {
@@ -395,6 +404,7 @@
 
     void Jacobi(int m1, int n1, float A[10][10], int m2, int n2, float b[10][10], float x[10][10])
     {
+        
         int i = 0;
         float D[10][10]= {0};
         float R[10][10]= {0};
@@ -411,13 +421,13 @@
         {
             multiply(m1,n1,R,m2,n2,x,Rx,false);
             // display(m1,n1,R,"R:");
-            display(m1,n1,x,"x:");
-            // display(m1,n1,Rx,"Rx:");
+            display(m1,n1,Rx,"Rx:");
             subtraction(m2,n2,b,m2,n2,Rx,bRx);
             // display(m1,n1,bRx,"bRx:");
             memset(x,0,sizeof(float)*10*10);
             display(m1,n1,x,"After memset:");
             multiply(m1,n1,invD,m2,n2,bRx,x,false);
+            display(m1,n1,bRx,"bRx:");
             display(m1,n1,invD,"InvD:");
             display(m1,n1,x,"Jacobi:");
             i +=1;
