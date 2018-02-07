@@ -124,11 +124,11 @@
             i++;
             multiply(m1, n1, x, m2, n2, y, xy,true);
         }
-        if(!recur){
-            display(m1,n1,x,"First:");
-            display(m2,n2,y,"Second:");
-            display(m1,n2,xy,"Result Mult:");
-        }
+        // if(!recur){
+        //     display(m1,n1,x,"First:");
+        //     display(m2,n2,y,"Second:");
+        //     display(m1,n2,xy,"Result Mult:");
+        // }
     }
     /*General Matrix function*/
     /*where m1 -> # of rows of first matrix , n1 -> # of columns of first matrix , a -> first matrix, 
