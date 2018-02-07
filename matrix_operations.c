@@ -31,7 +31,7 @@
 
     void remain(int m1, int n1, float a[10][10], float c[10][10]);
 
-    void Jacobi(int m1, int n1, float A[10][10], int m2, int n2, float b[10][10], float x[10][10]);
+    void Jacobi(int m1, int n1, float A[10][10], int m2, int n2, float b[10][10], float x[10][10],float tolerance);
 
     void clean(int m1,int n1, float c[10][10]);
 
@@ -76,7 +76,7 @@
                 fscanf(ip,"%f", &b[i][j]);
             }
 
-            Jacobi(m1, n1, a, m2, n2, b, c);
+            Jacobi(m1, n1, a, m2, n2, b, c,0.000001);
             // remain(m1,n1,a,d);
             // inverse(m1,n1,d,d);
            
@@ -466,7 +466,7 @@
         }
         return true;
     } 
-    void Jacobi(int m1, int n1, float A[10][10], int m2, int n2, float b[10][10], float x[10][10])
+    void Jacobi(int m1, int n1, float A[10][10], int m2, int n2, float b[10][10], float x[10][10],float tolerance)
     {
         
         int i = 2;//adjusted for the primer
@@ -493,7 +493,7 @@
         multiply(m1,n1,invD,m2,n2,bRx,x,false);
         iteration(m1,n2,x,1);
         /*end*/
-        while(i<20 && !hasConverged(m1,x,temp,0.001))
+        while(i<20 && !hasConverged(m1,x,temp,tolerance))
         {   
             display(m1,n2,x,"x:\n");
             display(m1,n2,temp,"Temp:\n");
@@ -501,16 +501,9 @@
             copy(m1,n2,x,temp);
             i +=1;
             multiply(m1,n1,R,m2,n2,x,Rx,false);
-            // display(m1,n1,R,"R:");
-            // display(m1,n1,Rx,"Rx:");
             subtraction(m2,n2,b,m2,n2,Rx,bRx);
-            // display(m1,n1,bRx,"bRx:");
             memset(x,0,sizeof(float)*10*10);
-            // display(m1,n1,x,"After memset:");
             multiply(m1,n1,invD,m2,n2,bRx,x,false);
-            
-            // display(m1,n1,bRx,"bRx:");
-            // display(m1,n1,invD,"InvD:");
             iteration(m1,n2,x,i);
             
         }
