@@ -49,31 +49,31 @@
         int m1, n1, m2, n2, i, j, k;
         float c[10][10] = {{0},{0},{0}};
 
-        printf("Enter rows and columns for Matrix A respectively: ");
+        // printf("Enter rows and columns for Matrix A respectively: ");
 
-        scanf("%d%d", &m1, &n1);
+        fscanf(ip,"%d%d", &m1, &n1);
 
-        printf("Enter rows and columns for Matrix B respectively: ");
+        // printf("Enter rows and columns for Matrix B respectively: ");
 
-        scanf("%d%d", &m2, &n2);
+        fscanf(ip,"%d%d", &m2, &n2);
 
         if (n1 != m2)
         {
-            printf("Matrix multiplication not possible.\n");
+            // printf("Matrix multiplication not possible.\n");
         }
         else
         {
-            printf("Enter elements in Matrix A:\n");
+            // printf("Enter elements in Matrix A:\n");
             for (i = 0; i < m1; i++)
             for (j = 0; j < n1; j++)
             {
-                scanf("%f", &a[i][j]);
+                fscanf(ip,"%f", &a[i][j]);
             }
-            printf("\nEnter elements in Matrix B:\n");
+            // printf("\nEnter elements in Matrix B:\n");
             for (i = 0; i < m2; i++)
             for (j = 0; j < n2; j++)
             {
-                scanf("%f", &b[i][j]);
+                fscanf(ip,"%f", &b[i][j]);
             }
 
             Jacobi(m1, n1, a, m2, n2, b, c);
@@ -84,6 +84,7 @@
         }
         display(m1, n2, c, "Matrix C");
         // display(m1, n1, d, "Matrix D");
+        printf("Done\n");
         fclose(fp);
 
     }
@@ -197,16 +198,16 @@
         clean(m1,n2,c);
         int i, j;
         fprintf(fp, "\n%s\n",message);
-        printf("\n%s\n",message);
+        // printf("\n%s\n",message);
         for (i = 0; i < m1; i++)
         {
             for (j = 0; j < n2; j++)
             {
                 fprintf(fp, "%f  ", c[i][j]);
-                printf("%f  ", c[i][j]);
+                // printf("%f  ", c[i][j]);
             }
             fprintf(fp,"\n");
-            printf("\n");
+            // printf("\n");
         }
         
     }
