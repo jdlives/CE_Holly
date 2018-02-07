@@ -401,9 +401,12 @@
         float Rx[10][10]= {0};
         float bRx[10][10]= {0};
         float invD[10][10]={0};
+        /*Constants factors*/
         diagonal(m1,n1,A,D);
         inverse(m1,n1,D,invD);
         remain(m1,n1,A,R);
+
+        /*Dynamic*/
         while(i<20)
         {
             multiply(m1,n1,R,m2,n2,x,Rx,false);
