@@ -192,7 +192,19 @@
         }
         
     }
+    void copy(int m1, int n1, float a[10][10], float b[10][10] )
 
+    {
+        int i, j;
+        for (i = 0; i < m1; i++)
+        {
+            for (j = 0; j < n1; j++)
+            {
+                b[i][j] = a[i][j];
+            }
+        }
+        
+    }
     /*To display a matrix.*/
     /*where m1 -> # of rows , n1 -> # of columns , c -> matrix to be displayed, message-> description of matrix*/
     void display(int m1, int n2, float c[10][10], char message[30])
@@ -213,6 +225,38 @@
             fprintf(fp,"\n");
             // printf("\n");
         }
+        
+    }
+    void iteration(int m1, int n2, float c[10][10], int itr)
+    {
+
+        clean(m1,n2,c);
+        int i, j, k;
+        
+        // printf("\n%s\n",message);
+        if(itr==0)
+        {
+            printf("i  ");
+            for (k = 1; k <= m1; k++){
+                printf("    x%d    ",k);
+            }
+            
+        }
+        else
+        {
+            printf("\n%d  ",itr);
+            for (i = 0; i < m1; i++)
+            {
+                for (j = 0; j < n2; j++)
+                {
+                    printf("%f  ", c[i][j]);
+                    // printf("%f  ", c[i][j]);
+                }
+                // printf("\n");
+            }
+        }    
+            
+        fprintf(fp,"\n");
         
     }
     void clean(int m1,int n1, float c[10][10])
@@ -405,25 +449,64 @@
 
         }
         
+        
     }
-
+    bool hasConverged (int k, float a[10][10], float b[10][10], float tolerance){
+        int i;
+        // printf("\n%s\n",message);
+        for (i = 0; i < k; i++)
+        {
+            if(fabs(a[i][0]-b[i][0])<tolerance){
+                printf("Difference: %f",a[i][0]-b[i][0]);
+                continue;
+            }
+            else
+            {
+                return false;
+            }
+        }
+        printf("success");
+        return true;
+    } 
     void Jacobi(int m1, int n1, float A[10][10], int m2, int n2, float b[10][10], float x[10][10])
     {
         
-        int i = 0;
+        int i = 2;
         float D[10][10]= {0};
         float R[10][10]= {0};
         float Rx[10][10]= {0};
         float bRx[10][10]= {0};
         float invD[10][10]={0};
+        float temp[10][10]={0};
         /*Constants factors*/
         diagonal(m1,n1,A,D);
         inverse(m1,n1,D,invD);
         remain(m1,n1,A,R);
-
+        iteration(m1,n2,x,0);
         /*Dynamic*/
-        while(i<20)
-        {
+        display(m1,n2,x,"x:\n");
+        display(m1,n2,temp,"Temp:\n");
+        
+        copy(m1,n2,x,temp);
+        multiply(m1,n1,R,m2,n2,x,Rx,false);
+        // display(m1,n1,R,"R:");
+        // display(m1,n1,Rx,"Rx:");
+        subtraction(m2,n2,b,m2,n2,Rx,bRx);
+        // display(m1,n1,bRx,"bRx:");
+        memset(x,0,sizeof(float)*10*10);
+        // display(m1,n1,x,"After memset:");
+        multiply(m1,n1,invD,m2,n2,bRx,x,false);
+        
+        // display(m1,n1,bRx,"bRx:");
+        // display(m1,n1,invD,"InvD:");
+        iteration(m1,n2,x,1);
+        while(i<20 && !hasConverged(m1,x,temp,0.001))
+        {   
+            display(m1,n2,x,"x:\n");
+            display(m1,n2,temp,"Temp:\n");
+            
+            copy(m1,n2,x,temp);
+            i +=1;
             multiply(m1,n1,R,m2,n2,x,Rx,false);
             // display(m1,n1,R,"R:");
             // display(m1,n1,Rx,"Rx:");
@@ -432,10 +515,11 @@
             memset(x,0,sizeof(float)*10*10);
             // display(m1,n1,x,"After memset:");
             multiply(m1,n1,invD,m2,n2,bRx,x,false);
+            
             // display(m1,n1,bRx,"bRx:");
             // display(m1,n1,invD,"InvD:");
-            display(m1,n1,x,"Jacobi:");
-            i +=1;
+            iteration(m1,n2,x,i);
+            
         }
        
     
