@@ -457,7 +457,6 @@
         for (i = 0; i < k; i++)
         {
             if(fabs(a[i][0]-b[i][0])<tolerance){
-                printf("Difference: %f",a[i][0]-b[i][0]);
                 continue;
             }
             else
@@ -465,13 +464,12 @@
                 return false;
             }
         }
-        printf("success");
         return true;
     } 
     void Jacobi(int m1, int n1, float A[10][10], int m2, int n2, float b[10][10], float x[10][10])
     {
         
-        int i = 2;
+        int i = 2;//adjusted for the primer
         float D[10][10]= {0};
         float R[10][10]= {0};
         float Rx[10][10]= {0};
@@ -486,20 +484,15 @@
         /*Dynamic*/
         display(m1,n2,x,"x:\n");
         display(m1,n2,temp,"Temp:\n");
-        
+
+        /*Primer(0,0,0)*/
         copy(m1,n2,x,temp);
         multiply(m1,n1,R,m2,n2,x,Rx,false);
-        // display(m1,n1,R,"R:");
-        // display(m1,n1,Rx,"Rx:");
         subtraction(m2,n2,b,m2,n2,Rx,bRx);
-        // display(m1,n1,bRx,"bRx:");
         memset(x,0,sizeof(float)*10*10);
-        // display(m1,n1,x,"After memset:");
         multiply(m1,n1,invD,m2,n2,bRx,x,false);
-        
-        // display(m1,n1,bRx,"bRx:");
-        // display(m1,n1,invD,"InvD:");
         iteration(m1,n2,x,1);
+        /*end*/
         while(i<20 && !hasConverged(m1,x,temp,0.001))
         {   
             display(m1,n2,x,"x:\n");
