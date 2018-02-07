@@ -60,31 +60,31 @@
         int m1, n1, m2, n2, i, j, k, choice;
         float c[10][10] = {{0},{0},{0}};
 
-        // printf("Enter rows and columns for Matrix A respectively: ");
+        printf("Enter rows and columns for Matrix A respectively: ");
 
-        fscanf(ip,"%d%d", &m1, &n1);
+        scanf("%d%d", &m1, &n1);
 
-        // printf("Enter rows and columns for Matrix B respectively: ");
+        printf("Enter rows and columns for Matrix B respectively: ");
 
-        fscanf(ip,"%d%d", &m2, &n2);
+        scanf("%d%d", &m2, &n2);
 
         if (n1 != m2)
         {
-            // printf("Matrix multiplication not possible.\n");
+            printf("Matrix multiplication not possible.\n");
         }
         else
         {
-            // printf("Enter elements in Matrix A:\n");
+            printf("Enter elements in Matrix A:\n");
             for (i = 0; i < m1; i++)
             for (j = 0; j < n1; j++)
             {
-                fscanf(ip,"%f", &a[i][j]);
+                scanf("%f", &a[i][j]);
             }
-            // printf("\nEnter elements in Matrix B:\n");
+            printf("\nEnter elements in Matrix B:\n");
             for (i = 0; i < m2; i++)
             for (j = 0; j < n2; j++)
             {
-                fscanf(ip,"%f", &b[i][j]);
+                scanf("%f", &b[i][j]);
             }
             printf("Enter method of choise: (1)Jacobi , (2) Guass Seidal, (3)SOR\n");
             scanf("%d",&choice);
