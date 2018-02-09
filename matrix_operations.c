@@ -58,7 +58,7 @@
         ip = fopen("input.txt","r");
         float dt, a[10][10]={0}, b[10][10]={0}, /*c[10][10] = {0},*/d[10][10] = {0}, e[10][10] = {0};
         int m1, n1, m2, n2, i, j, k, choice;
-        float c[10][10] = {{0},{0},{0}};
+        float c[10][10] = {0};
 
         printf("Enter rows and columns for Matrix A respectively: ");
 
@@ -506,7 +506,6 @@
     } 
     void Jacobi(int m1, int n1, float A[10][10], int m2, int n2, float b[10][10], float x[10][10],float tolerance)
     {
-        
         int i = 2;//adjusted for the primer
         float D[10][10]= {0};
         float R[10][10]= {0};
@@ -520,7 +519,7 @@
         remain(m1,n1,A,R);
         iteration(m1,n2,x,0);
         /*Dynamic*/
-        display(m1,n2,x,"x:\n");
+        display(m1,n1,invD,"invD:\n");
         display(m1,n2,temp,"Temp:\n");
 
         /*Primer(0,0,0)*/
@@ -531,9 +530,9 @@
         multiply(m1,n1,invD,m2,n2,bRx,x,false);
         iteration(m1,n2,x,1);
         /*end*/
-        while(i<20 && !hasConverged(m1,x,temp,tolerance))
+        while(i<1000 && !hasConverged(m1,x,temp,tolerance))
         {   
-            display(m1,n2,x,"x:\n");
+            display(m1,n2,Rx,"Rx:\n");
             display(m1,n2,temp,"Temp:\n");
             
             copy(m1,n2,x,temp);
@@ -664,7 +663,7 @@
         multiply(m1,n1,invD,m2,n2,bRx,x,false);
         iteration(m1,n2,x,1);
         /*end*/
-        while(i<20 && !hasConverged(m1,x,temp,tolerance))
+        while(i<1000 && !hasConverged(m1,x,temp,tolerance))
         {   
             display(m1,n2,x,"x:\n");
             display(m1,n2,temp,"Temp:\n");
@@ -726,7 +725,7 @@
         multiply(m1,n1,invD,m2,n2,bRx,x,false);
         iteration(m1,n2,x,1);
         /*end*/
-        while(i<50 && !hasConverged(m1,x,temp,tolerance))
+        while(i<1000 && !hasConverged(m1,x,temp,tolerance))
         {   
             copy(m1,n2,x,temp);
             memset(Rx,0,sizeof(float)*10*10);
