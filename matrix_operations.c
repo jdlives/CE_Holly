@@ -1,16 +1,7 @@
-    /*
-
-     * C Program to Perform Matrix Multiplication using Recursion
-
-     */
-
     #include <stdio.h>
     #include <math.h>
     #include<stdbool.h>
     #include<string.h>
-
-
-     
 
     void multiply (int m1, int n1, float x[10][10], int m2, int n2, float y[10][10], float xy[10][10],bool recur);
 
@@ -32,17 +23,11 @@
 
     void remain(int m1, int n1, float a[10][10], float c[10][10]);
 
-    void Jacobi(int m1, int n1, float A[10][10], int m2, int n2, float b[10][10], float x[10][10],float tolerance);
-
     void clean(int m1,int n1, float c[10][10]);
 
     void L(int m1, int n1, float a[10][10], float c[10][10]);
 
-    void U(int m1, int n1, float a[10][10], float c[10][10]);
-
     void Guass_Seidal(int m1, int n1, float A[10][10], int m2, int n2, float b[10][10], float x[10][10],float tolerance);
-
-    void SOR(int m1, int n1, float A[10][10], int m2, int n2, float b[10][10], float x[10][10],float tolerance);
 
     void addn(int m1, int n1, float a[10][10], float w,float c[10][10]);
 
@@ -56,17 +41,21 @@
     {
         fp = fopen("output.txt", "w");
         ip = fopen("input.txt","r");
-        float dt, a[10][10]={0}, b[10][10]={0}, /*c[10][10] = {0},*/d[10][10] = {0}, e[10][10] = {0};
+        float dt, d[10][10] = {0}, e[10][10] = {0};
         int m1, n1, m2, n2, i, j, k, choice;
         float c[10][10] = {0};
 
-        printf("Enter rows and columns for Matrix A respectively: ");
-
-        scanf("%d%d", &m1, &n1);
-
-        printf("Enter rows and columns for Matrix B respectively: ");
-
-        scanf("%d%d", &m2, &n2);
+        float a[10][10] = {{ 2, 4,-2}
+                          ,{ 4, 9,-3}
+                          ,{-2,-3, 7}};
+        float b[10][10] = {{ 2}
+                          ,{ 8}
+                          ,{10}};
+        //removed user input
+        m1=3;
+        n1=3;
+        m2=3;
+        n2=1;
 
         if (n1 != m2)
         {
@@ -74,40 +63,13 @@
         }
         else
         {
-            printf("Enter elements in Matrix A:\n");
-            for (i = 0; i < m1; i++)
-            for (j = 0; j < n1; j++)
-            {
-                scanf("%f", &a[i][j]);
-            }
-            printf("\nEnter elements in Matrix B:\n");
-            for (i = 0; i < m2; i++)
-            for (j = 0; j < n2; j++)
-            {
-                scanf("%f", &b[i][j]);
-            }
-            printf("Enter method of choise: (1)Jacobi , (2) Guass Seidal, (3)SOR\n");
-            scanf("%d",&choice);
-            switch(choice){
-                case 1:
-                    Jacobi(m1,n1,a,m2,n2,b,c,0.00001);
-                break;
-                case 2:
-                    Guass_Seidal(m1,n1,a,m2,n2,b,d,0.00001);
-                break;
-                case 3:
-                    SOR(m1, n1, a, m2, n2, b, e,0.00001);
-                break;
-             
-            }
+            Guass_Seidal(m1,n1,a,m2,n2,b,d,0.00001);
+        }
             
             
             
             // remain(m1,n1,a,d);
             // inverse(m1,n1,d,d);
-           
-
-        }
         display(m1, n2, c, "Matrix C");
         // display(m1, n1, d, "Matrix D");
         printf("Done\n");
@@ -491,7 +453,6 @@
     }
     bool hasConverged (int k, float a[10][10], float b[10][10], float tolerance){
         int i;
-        // printf("\n%s\n",message);
         for (i = 0; i < k; i++)
         {
             if(fabs(a[i][0]-b[i][0])<tolerance){
@@ -504,49 +465,6 @@
         }
         return true;
     } 
-    void Jacobi(int m1, int n1, float A[10][10], int m2, int n2, float b[10][10], float x[10][10],float tolerance)
-    {
-        int i = 2;//adjusted for the primer
-        float D[10][10]= {0};
-        float R[10][10]= {0};
-        float Rx[10][10]= {0};
-        float bRx[10][10]= {0};
-        float invD[10][10]={0};
-        float temp[10][10]={0};
-        /*Constants factors*/
-        diagonal(m1,n1,A,D);
-        inverse(m1,n1,D,invD);
-        remain(m1,n1,A,R);
-        iteration(m1,n2,x,0);
-        /*Dynamic*/
-        display(m1,n1,invD,"invD:\n");
-        display(m1,n2,temp,"Temp:\n");
-
-        /*Primer(0,0,0)*/
-        copy(m1,n2,x,temp);
-        multiply(m1,n1,R,m2,n2,x,Rx,false);
-        subtraction(m2,n2,b,m2,n2,Rx,bRx);
-        memset(x,0,sizeof(float)*10*10);
-        multiply(m1,n1,invD,m2,n2,bRx,x,false);
-        iteration(m1,n2,x,1);
-        /*end*/
-        while(i<1000 && !hasConverged(m1,x,temp,tolerance))
-        {   
-            display(m1,n2,Rx,"Rx:\n");
-            display(m1,n2,temp,"Temp:\n");
-            
-            copy(m1,n2,x,temp);
-            i +=1;
-            multiply(m1,n1,R,m2,n2,x,Rx,false);
-            subtraction(m2,n2,b,m2,n2,Rx,bRx);
-            memset(x,0,sizeof(float)*10*10);
-            multiply(m1,n1,invD,m2,n2,bRx,x,false);
-            iteration(m1,n2,x,i);
-            
-        }
-       
-    
-    }
 
     void L(int m1, int n1, float a[10][10], float c[10][10])
 
@@ -606,37 +524,6 @@
         
     }
 
-    void Low(int m1, int n1, float a[10][10], float c[10][10])
-
-    {
-        if(m1 != n1)
-        {
-             printf("Getting L not possible.\n");
-        }
-        else
-        {
-            int i, j;
-            for (i = 0; i < m1; i++)
-            {
-                for (j = 0; j < n1; j++)
-                {
-                    if (j >= i)
-                    {
-                        c[i][j] = 0;
-                    }
-                    else
-                    {
-                        c[i][j] = a[i][j];
-                    }
-                }
-            }
-
-        }
-        
-    }
-
-    
-
     void Guass_Seidal(int m1, int n1, float A[10][10], int m2, int n2, float b[10][10], float x[10][10],float tolerance)
     {
         int i = 2;//adjusted for the primer
@@ -663,7 +550,7 @@
         multiply(m1,n1,invD,m2,n2,bRx,x,false);
         iteration(m1,n2,x,1);
         /*end*/
-        while(i<1000 && !hasConverged(m1,x,temp,tolerance))
+        while(i<100 /*&& !hasConverged(m1,x,temp,tolerance)*/)
         {   
             display(m1,n2,x,"x:\n");
             display(m1,n2,temp,"Temp:\n");
@@ -678,65 +565,6 @@
             
         }
 
-    }
-
-    void SOR(int m1, int n1, float A[10][10], int m2, int n2, float b[10][10], float x[10][10],float tolerance)
-    {
-        
-        int i = 2;//adjusted for the primer
-        float D[10][10]= {0};
-        float change[10][10]= {0};
-        float w1D[10][10] = {0};
-        float L[10][10]= {0};
-        float U[10][10]= {0};
-        float wL[10][10] = {0};
-        float wb[10][10] = {0};
-        float wU[10][10] = {0};
-        float DwL[10][10] = {0};
-        float R[10][10]= {0};
-        float Rx[10][10]= {0};
-        float bRx[10][10]= {0};
-        float invD[10][10]={0};
-        float temp[10][10]={0};
-        /*Constants factors*/
-        diagonal(m1,n1,A,D);
-        Low(m1,n1,A,L);
-        Upper(m1,n1,A,U);
-        addn(m1,n1,L,1.5,wL);
-        addn(m1,n2,b,1.5,wb);
-        addn(m1,n1,U,1.5,wU);
-        addn(m1,n1,D,1.5-1,w1D);
-        
-        addition(m1,n1,D,m1,n1,wL,DwL);
-        addition(m1,n1,wU,m1,n1,w1D,change);
-        
-        inverse(m1,n1,DwL,invD);
-        // remain(m1,n1,A,R);
-        iteration(m1,n2,x,0);
-        /*Dynamic*/
-        display(m1,n2,x,"x:\n");
-        display(m1,n2,temp,"Temp:\n");
-
-        /*Primer(0,0,0)*/
-        copy(m1,n2,x,temp);
-        multiply(m1,n1,change,m2,n2,x,Rx,false);
-        subtraction(m2,n2,wb,m2,n2,Rx,bRx);
-        memset(x,0,sizeof(float)*10*10);
-        multiply(m1,n1,invD,m2,n2,bRx,x,false);
-        iteration(m1,n2,x,1);
-        /*end*/
-        while(i<1000 && !hasConverged(m1,x,temp,tolerance))
-        {   
-            copy(m1,n2,x,temp);
-            memset(Rx,0,sizeof(float)*10*10);
-            multiply(m1,n1,change,m2,n2,x,Rx,false);
-            subtraction(m2,n2,wb,m2,n2,Rx,bRx);
-            memset(x,0,sizeof(float)*10*10);
-            multiply(m1,n1,invD,m2,n2,bRx,x,false);
-            iteration(m1,n2,x,i);
-            i +=1;
-            
-        }
     }
 
     
