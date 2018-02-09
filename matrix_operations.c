@@ -1,11 +1,10 @@
+    //Author: Jan Daniel Laborada for PA2 CS131 WFX
     #include <stdio.h>
     #include <math.h>
     #include<stdbool.h>
     #include<string.h>
 
     void multiply (int m1, int n1, float x[10][10], int m2, int n2, float y[10][10], float xy[10][10],bool recur);
-
-    void display(int m1, int n1, float[10][10],char message[30]);
 
     void diagonal(int m1, int n1, float a[10][10], float c[10][10]);
 
@@ -31,23 +30,16 @@
 
     void addn(int m1, int n1, float a[10][10], float w,float c[10][10]);
 
-    FILE *fp;
-    FILE *ip;
-    
-
-
     int main()
 
     {
-        fp = fopen("output.txt", "w");
-        ip = fopen("input.txt","r");
-        float dt, d[10][10] = {0}, e[10][10] = {0};
+        float dt, d[10][10] = {0};
         int m1, n1, m2, n2, i, j, k, choice;
         float c[10][10] = {0};
 
-        float a[10][10] = {{ 2, 4,-2}
-                          ,{ 4, 9,-3}
-                          ,{-2,-3, 7}};
+        float a[10][10] = {{ 4, 2,-2}
+                          ,{ 2, 10,2}
+                          ,{-2, 2, 5}};
         float b[10][10] = {{ 2}
                           ,{ 8}
                           ,{10}};
@@ -65,15 +57,8 @@
         {
             Guass_Seidal(m1,n1,a,m2,n2,b,d,0.00001);
         }
-            
-            
-            
-            // remain(m1,n1,a,d);
-            // inverse(m1,n1,d,d);
-        display(m1, n2, c, "Matrix C");
-        // display(m1, n1, d, "Matrix D");
-        printf("Done\n");
-        fclose(fp);
+
+        printf("Done after 100 iterations\n");
 
     }
     /*Genral matrix function*/
@@ -112,11 +97,6 @@
             i++;
             multiply(m1, n1, x, m2, n2, y, xy,true);
         }
-        // if(!recur){
-        //     display(m1,n1,x,"First:");
-        //     display(m2,n2,y,"Second:");
-        //     display(m1,n2,xy,"Result Mult:");
-        // }
     }
     /*General Matrix function*/
     /*where m1 -> # of rows of first matrix , n1 -> # of columns of first matrix , a -> first matrix, 
@@ -205,28 +185,7 @@
         }
         
     }
-    /*To display a matrix.*/
-    /*where m1 -> # of rows , n1 -> # of columns , c -> matrix to be displayed, message-> description of matrix*/
-    void display(int m1, int n2, float c[10][10], char message[30])
 
-    {
-
-        clean(m1,n2,c);
-        int i, j;
-        fprintf(fp, "\n%s\n",message);
-        // printf("\n%s\n",message);
-        for (i = 0; i < m1; i++)
-        {
-            for (j = 0; j < n2; j++)
-            {
-                fprintf(fp, "%f  ", c[i][j]);
-                // printf("%f  ", c[i][j]);
-            }
-            fprintf(fp,"\n");
-            // printf("\n");
-        }
-        
-    }
     void iteration(int m1, int n2, float c[10][10], int itr)
     {
 
@@ -255,8 +214,6 @@
                 // printf("\n");
             }
         }    
-            
-        fprintf(fp,"\n");
         
     }
     void clean(int m1,int n1, float c[10][10])
@@ -539,8 +496,6 @@
         Upper(m1,n1,A,R);
         iteration(m1,n2,x,0);
         /*Dynamic*/
-        display(m1,n2,x,"x:\n");
-        display(m1,n2,temp,"Temp:\n");
 
         /*Primer(0,0,0)*/
         copy(m1,n2,x,temp);
@@ -552,9 +507,6 @@
         /*end*/
         while(i<100 /*&& !hasConverged(m1,x,temp,tolerance)*/)
         {   
-            display(m1,n2,x,"x:\n");
-            display(m1,n2,temp,"Temp:\n");
-            
             copy(m1,n2,x,temp);
             i +=1;
             multiply(m1,n1,R,m2,n2,x,Rx,false);
