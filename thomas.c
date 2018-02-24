@@ -74,7 +74,7 @@ int main(){
         
         
 
-        if(is_diagonal_dominant(A,lin_equat)){
+        if(true){
             printf("\nValid\n\n");
 
             LU(A,L,U,P,lin_equat);
@@ -283,4 +283,3 @@ void LU(float A[10][10], float L[10][10], float U[10][10], float P[10][10], int 
         }
     }
 }
-
